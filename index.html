@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="ru" class="js typo-a font-1">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sintara — студия систем</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600&family=JetBrains+Mono:wght@400&family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="img/eye-frames.webp">
+<style>
+:root{
+  --bg:#0b0b0c; --fg:#f2f0eb; --tx:#c2bfba; --gr:#807d7a;
+  --gray:#c4c2bd; --ink:#121213; --ink2:#5c5a57;
+  --acc:139,92,255; --red:rgb(var(--acc)); --red-glow:rgba(var(--acc),.7);
+  --ease:cubic-bezier(.23,1,.32,1);
+  --pad:clamp(20px,4.4vw,64px);
+  --max:1440px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);color:var(--fg);font-family:Onest,system-ui,sans-serif;-webkit-font-smoothing:antialiased;overflow-x:clip}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{width:100%;max-width:var(--max);margin:0 auto;padding:0 var(--pad) 0 calc(var(--pad) + 88px)}
+.top .wrap{padding-left:var(--pad)}
+.grain{position:fixed;inset:-50%;pointer-events:none;z-index:50;opacity:.06;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  animation:grain 1s steps(4) infinite}
+@keyframes grain{0%,100%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}}
+
+/* ---------- шапка ---------- */
+.top{position:fixed;inset:0 0 auto;z-index:40;pointer-events:none}
+.top a{pointer-events:auto}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:88px}
+.rail{position:fixed;z-index:41;left:var(--pad);top:0;bottom:0;width:22px;pointer-events:none}
+.rail>*{pointer-events:auto}
+.logo{position:absolute;left:0;top:33px;display:flex;align-items:center;gap:10px;font-weight:500;font-size:20px;letter-spacing:-.03em;white-space:nowrap}
+.logo-mark{display:block;width:22px;aspect-ratio:116/128;background:var(--red);-webkit-mask:url(img/logo-mark.png) center/contain no-repeat;mask:url(img/logo-mark.png) center/contain no-repeat}
+.logo-word{display:inline-block;mix-blend-mode:difference;will-change:transform,opacity}
+.cta-top{mix-blend-mode:difference;padding:12px 22px;border:1px solid rgba(242,240,235,.4);font-size:13px;font-weight:500;transition:border-color .3s var(--ease)}
+.cta-top:hover{border-color:var(--fg)}
+
+/* меню слева, две линии — закреплено */
+.burger{position:absolute;left:0;top:50%;width:22px;height:10px;transform:translateY(-50%);mix-blend-mode:difference;cursor:pointer}
+.burger i{position:absolute;left:0;width:100%;height:2px;background:var(--fg);transform-origin:left center;transition:width .4s var(--ease),background-color .3s,box-shadow .3s}
+.burger i:first-child{top:0}.burger i:last-child{bottom:0}
+.burger:hover i:last-child{width:60%}
+.burger:hover,.burger:focus-visible{mix-blend-mode:normal}
+.burger:hover i,.burger:focus-visible i{background:var(--red);box-shadow:0 0 10px rgba(var(--acc),.8)}
+.rail-next{all:unset;position:absolute;left:-6px;bottom:36px;width:34px;height:64px;cursor:pointer}
+.rail-next canvas{width:100%;height:100%;display:block}
+.rail-next:focus-visible{outline:1px solid var(--red);outline-offset:4px}
+
+/* ---------- первый экран ---------- */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;z-index:1}
+.eye-layer{position:absolute;left:0;right:0;top:0;height:104svh;pointer-events:none;will-change:transform;z-index:0}
+.eye-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none}
+.eye-shade{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(90deg,var(--bg) 0,var(--bg) 18%,rgba(11,11,12,.85) 34%,rgba(11,11,12,.35) 50%,rgba(11,11,12,0) 64%),
+  linear-gradient(0deg,var(--bg) 0,rgba(11,11,12,0) 26%),
+  linear-gradient(180deg,rgba(11,11,12,.8) 0,rgba(11,11,12,0) 16%)}
+.hero .wrap{position:relative;z-index:3;will-change:transform,opacity;padding-top:120px;padding-bottom:64px;display:grid;grid-template-rows:1fr auto;min-height:100svh}
+.slogan{align-self:center;font-weight:500;font-size:clamp(44px,6.4vw,92px);line-height:1;letter-spacing:-.055em;padding-left:clamp(0px,9.7vw,136px)}
+.slogan .dot{color:var(--red);text-shadow:0 0 12px rgba(var(--acc),.75),0 0 28px rgba(var(--acc),.35)}
+.more{position:relative;display:inline-block;margin-top:40px;font-size:15px;font-weight:500;padding-bottom:8px;letter-spacing:-.01em}
+.more::before,.more::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--fg)}
+.more::after{height:1.5px;width:0;background:var(--red);box-shadow:0 0 10px rgba(var(--acc),.85),0 0 22px rgba(var(--acc),.4);transition:width .6s var(--ease)}
+.more:hover::after,.more:focus-visible::after{width:100%}
+.hero-foot{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px;padding-left:clamp(0px,9.7vw,136px);font-size:13px;line-height:1.45;color:var(--gr)}
+.hero-foot b{display:block;font-weight:500;font-size:14px;color:var(--fg);margin-bottom:6px}
+.hero-foot .geo{text-align:right;align-self:end}
+
+/* ---------- блок 2 ---------- */
+.b2{position:relative;z-index:2;min-height:100svh;display:flex;align-items:center;padding:96px 0;overflow:clip}
+.b2-dna{position:absolute;right:clamp(-120px,-2vw,0px);top:-6%;width:clamp(320px,38vw,560px);height:112%;pointer-events:none;will-change:transform;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 18%,#000 72%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 18%,#000 72%,transparent 100%)}
+.b2-dna img{width:100%;height:100%;object-fit:cover;object-position:50% 40%;opacity:.85}
+.b2-rung{position:absolute;left:50%;top:38%;width:46%;aspect-ratio:2.4;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(closest-side,rgba(var(--acc),.55),rgba(var(--acc),0));mix-blend-mode:screen;animation:rung 4.2s ease-in-out infinite}
+@keyframes rung{0%,100%{opacity:.25}8%{opacity:1}14%{opacity:.4}20%{opacity:.85}40%{opacity:.3}}
+.b2-orbit{position:absolute;left:50%;top:50%;width:min(940px,80vw);aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(242,240,235,.06);pointer-events:none}
+.b2-guides{position:absolute;inset:0;pointer-events:none;background:
+  linear-gradient(rgba(242,240,235,.06),rgba(242,240,235,.06)) calc(var(--pad) + 88px) 0/1px 100% no-repeat,
+  linear-gradient(rgba(242,240,235,.06),rgba(242,240,235,.06)) calc(100% - var(--pad)) 0/1px 100% no-repeat}
+.b2-bar{position:absolute;top:0;left:0;right:0;height:64px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:24px;padding:0 var(--pad) 0 calc(var(--pad) + 88px);
+  border-bottom:1px solid rgba(242,240,235,.1);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gr)}
+.b2-bar .box{padding:9px 0;width:min(320px,40vw);text-align:center;border:1px solid rgba(242,240,235,.15);color:var(--fg)}
+.b2-bar span:last-child{text-align:right}
+.b2-col{position:relative;width:min(440px,100%);margin:0 auto;padding:0 var(--pad)}
+.b2-label{font-size:12px;color:var(--gr);padding-bottom:14px;margin-bottom:28px;border-bottom:1px solid rgba(242,240,235,.18)}
+.b2 h2{font-weight:500;font-size:clamp(32px,2.8vw,40px);line-height:1.04;letter-spacing:-.05em;margin-bottom:28px}
+.b2-text{font-size:15px;line-height:1.65;letter-spacing:-.01em;color:var(--tx);margin-bottom:16px}
+.para em{font-style:normal;color:var(--red);text-shadow:0 0 12px rgba(var(--acc),.6)}
+.b2-steps{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;margin-top:36px;padding-top:18px;border-top:1px solid rgba(242,240,235,.12);font-size:12px;color:var(--gr)}
+
+/* ---------- текстовые анимации ---------- */
+.ln{display:block;overflow:hidden;padding-bottom:.08em;margin-bottom:-.08em}
+.ln>span{display:block;will-change:transform}
+.js .ln>span{transform:translateY(110%)}
+.js .fade{opacity:0;transform:translateY(16px)}
+
+/* ---------- система → портфолио: заголовок едет вместе с лентой ---------- */
+.system{position:relative;height:100svh;overflow:hidden;color:var(--ink);background:var(--gray);display:flex;align-items:center}
+.sys-in{width:100%}
+.track{display:flex;align-items:flex-start;gap:30px;padding-left:max(calc(var(--pad) + 88px),calc((100vw - var(--max)) / 2 + var(--pad) + 88px));will-change:transform}
+.sys-intro{flex:0 0 auto;width:clamp(300px,30vw,440px);margin-right:clamp(20px,4vw,70px)}
+.sys-title{font-weight:500;font-size:clamp(34px,3.6vw,56px);line-height:1;letter-spacing:-.05em}
+.sys-title .ln:last-child{color:var(--ink2)}
+.rules{list-style:none;margin-top:clamp(24px,4svh,40px);display:grid;gap:10px;font-size:15px;color:var(--ink2)}
+.rules li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 8px rgba(var(--acc),.7);margin-right:12px;vertical-align:middle}
+.card{flex:0 0 auto;width:clamp(240px,min(28vw,48svh),440px)}
+.card .ph{aspect-ratio:1;overflow:hidden;background:#222}
+.card img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.25) brightness(.85);transform-origin:left center}
+.card p{margin-top:14px;font-weight:500;font-size:20px;letter-spacing:-.03em}
+.card p span{font-weight:400;font-size:14px;color:var(--ink2);margin-left:10px;letter-spacing:0}
+.progress{position:relative;margin-top:clamp(18px,3svh,40px);height:1px;background:rgba(18,18,19,.2)}
+.progress i{position:absolute;left:0;top:-.5px;height:1.5px;width:0;background:var(--red);box-shadow:0 0 8px var(--red-glow)}
+.count{display:block;margin-top:10px;text-align:right;font-size:13px;color:var(--ink2)}
+.end{height:50svh;background:var(--gray)}
+
+@media (max-width:900px){
+  .wrap{padding-left:var(--pad)}
+  .eye-shade{background:linear-gradient(180deg,rgba(11,11,12,.2) 0,rgba(11,11,12,.75) 45%,var(--bg) 70%)}
+  .slogan{padding-left:0}
+  .burger,.rail-next{display:none}
+  .hero-foot{grid-template-columns:1fr 1fr;padding-left:0}.hero-foot .geo{display:none}
+  .b2-bar span:first-child,.b2-bar span:last-child{display:none}.b2-bar{grid-template-columns:1fr;padding-left:var(--pad)}.b2-bar .box{justify-self:center}
+}
+@media (max-width:520px){.hero-foot{grid-template-columns:1fr}.top .cta-top{display:none}}
+@media (prefers-reduced-motion:reduce){.grain{animation:none}.iris{-webkit-mask-image:none;mask-image:none}}
+/* ---------- журнальная часть ---------- */
+.dim{color:var(--gr)}
+.j-grid{display:grid;grid-template-columns:1fr;gap:clamp(20px,3vw,48px);align-items:start}
+.j-kick{font-size:12px;color:var(--gr);padding-top:.6em}
+.j-head{margin-bottom:clamp(56px,8vw,120px)}
+.j-big{font-weight:500;font-size:clamp(40px,5.6vw,84px);line-height:.96;letter-spacing:-.055em}
+.j-huge{font-weight:500;font-size:clamp(56px,10vw,160px);line-height:.9;letter-spacing:-.06em;margin:24px 0 clamp(48px,6vw,90px)}
+.j-huge .dot{color:var(--red);text-shadow:0 0 18px rgba(var(--acc),.7)}
+.j-lead{font-size:clamp(20px,1.9vw,28px);line-height:1.35;letter-spacing:-.025em;max-width:880px}
+.j-link{display:inline-flex;gap:8px;margin-top:28px;font-size:14px;font-weight:500;padding-bottom:6px;border-bottom:1px solid rgba(242,240,235,.4);transition:color .3s,border-color .3s}
+.j-link:hover{color:var(--red);border-color:var(--red)}
+.clip{overflow:hidden}
+.clip img{display:block;width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.85)}
+
+/* переход-гряда */
+.ridge{position:relative;height:130svh;background:#000;overflow:hidden}
+.ridge-img{position:absolute;left:0;top:0;width:100%;height:118%;object-fit:cover;object-position:50% 0;will-change:transform}
+.ridge::after{content:"";position:absolute;inset:auto 0 0;height:40%;background:linear-gradient(0deg,#000,rgba(0,0,0,0))}
+.ridge-labels{position:absolute;left:0;right:0;top:56%;z-index:2;display:grid;grid-template-columns:1fr 1fr 1fr;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);text-shadow:0 0 12px rgba(var(--acc),.6)}
+.ridge-labels span:nth-child(2){text-align:center}.ridge-labels span:last-child{text-align:right}
+
+/* мы видим всё */
+.j-see{background:#000;padding:clamp(80px,10vw,160px) 0}
+.j-see .j-grid+.j-grid{margin-bottom:clamp(80px,10vw,150px)}
+.case-feature{border-top:1px solid rgba(242,240,235,.12);padding-top:clamp(28px,3vw,40px)}
+.cf-img{aspect-ratio:21/9;margin-bottom:clamp(32px,4vw,56px)}
+.cf-body{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,4vw,64px)}
+.cf-title{font-weight:500;font-size:clamp(40px,4.4vw,64px);line-height:1;letter-spacing:-.05em}
+.meta{font-size:14px;margin-bottom:40px}
+.meta div{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:8px 0;border-bottom:1px solid rgba(242,240,235,.12)}
+.meta dt{color:var(--gr)}.meta dd{margin:0}
+.cf-text{font-size:14px;line-height:1.6;color:var(--tx);max-width:520px}
+
+/* вселенная */
+.j-uni{background:#000;padding:clamp(80px,10vw,160px) 0 clamp(80px,9vw,140px)}
+.panel{position:relative;background:#18181a;padding:22px 24px;margin-bottom:clamp(100px,12vw,180px)}
+.panel-top,.panel-bot{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.star{width:10px;height:10px;border-radius:50%;background:var(--red);box-shadow:0 0 14px rgba(var(--acc),.9),0 0 30px rgba(var(--acc),.45)}
+.panel-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(24px,4vw,64px);padding:clamp(48px,6vw,90px) clamp(0px,3vw,40px) clamp(56px,7vw,110px)}
+.pc-ico{width:44px;height:44px;fill:none;stroke:var(--fg);stroke-width:1.6;margin-bottom:28px}
+.pc-ico .acc{stroke:var(--red);fill:var(--red);filter:drop-shadow(0 0 4px rgba(var(--acc),.8))}
+.pc-ico .fill{fill:var(--fg);stroke:none}
+.pc h3{font-weight:400;font-size:clamp(22px,1.9vw,28px);line-height:1.15;letter-spacing:-.03em;margin-bottom:clamp(28px,3vw,44px)}
+.pc p{font-size:13px;line-height:1.55;color:var(--tx);max-width:300px}
+.prods{max-width:760px;margin-bottom:clamp(40px,4vw,64px)}
+.j-arrow{font-size:13px;font-weight:500;margin-bottom:16px}
+.prods-title{font-weight:500;font-size:clamp(28px,2.8vw,42px);line-height:1.08;letter-spacing:-.04em;margin-bottom:20px}
+.prods-text{font-size:14px;line-height:1.55;color:var(--tx);max-width:460px}
+.prod-row{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 var(--pad) 8px calc(var(--pad) + 88px);scrollbar-width:none;cursor:grab}
+.prod-row::-webkit-scrollbar{display:none}
+.prod{position:relative;flex:0 0 auto;width:clamp(240px,24vw,340px);aspect-ratio:3/4;overflow:hidden;scroll-snap-align:start;background:#111}
+.prod img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:grayscale(1) blur(1.5px) brightness(.7);transform:scale(1.06);transition:transform 1.2s var(--ease),filter .6s var(--ease)}
+.prod:hover img{transform:scale(1.12);filter:grayscale(1) blur(0) brightness(.8)}
+.prod b{position:absolute;left:14px;top:14px;font-weight:500;font-size:18px;letter-spacing:-.02em}
+.prod em{position:absolute;right:12px;top:12px;font-style:normal;font-size:11px;padding:4px 10px;border-radius:99px;background:rgba(242,240,235,.85);color:#111}
+.prod span{position:absolute;left:14px;right:14px;bottom:14px;font-size:13px;line-height:1.35;color:var(--fg)}
+
+/* голос */
+.j-voice{background:#000;padding:clamp(80px,10vw,160px) 0}
+.svc-row{display:grid;grid-template-columns:minmax(200px,4fr) 8fr;gap:clamp(24px,4vw,64px);padding:clamp(28px,3vw,44px) 0;border-top:1px solid rgba(242,240,235,.12)}
+.svc-l{display:flex;flex-direction:column}
+.svc-l h3{font-weight:500;font-size:clamp(26px,2.4vw,36px);line-height:1.02;letter-spacing:-.02em;text-transform:uppercase}
+.svc-l ul{list-style:none;margin-top:18px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gr);display:grid;gap:8px}
+.btn-sm{margin-top:auto;align-self:flex-start;font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:7px 12px;border:1px solid rgba(242,240,235,.3);transition:border-color .3s,color .3s,box-shadow .3s}
+.btn-sm:hover{border-color:var(--red);color:var(--red);box-shadow:0 0 18px rgba(var(--acc),.35)}
+.svc-r{aspect-ratio:16/10;border-radius:4px}
+
+/* финал */
+.j-end{background:#000;padding:clamp(100px,12vw,180px) 0 40px}
+.end-row{display:grid;grid-template-columns:1fr auto;gap:40px;align-items:end;margin-bottom:clamp(80px,9vw,140px)}
+.btn-big{display:inline-flex;gap:14px;align-items:center;padding:20px 30px;border:1px solid rgba(var(--acc),.7);font-size:16px;font-weight:500;transition:background .4s var(--ease),box-shadow .4s var(--ease)}
+.btn-big:hover{background:rgba(var(--acc),.12);box-shadow:0 0 40px rgba(var(--acc),.4),inset 0 0 20px rgba(var(--acc),.15)}
+.ct-row{display:grid;grid-template-columns:2fr 3fr 2fr;gap:20px;padding:16px 0;border-top:1px solid rgba(242,240,235,.12);font-size:15px}
+.ct-row span:first-child{text-transform:uppercase;font-size:12px;letter-spacing:.12em;color:var(--gr);padding-top:2px}
+.ct-row span:last-child{text-align:right;color:var(--gr)}
+.foot{display:flex;justify-content:space-between;gap:20px;margin-top:clamp(80px,9vw,140px);padding-top:16px;border-top:1px solid rgba(242,240,235,.12);font-size:12px;color:var(--gr)}
+
+@media (max-width:900px){
+  .j-grid{grid-template-columns:1fr;gap:12px}
+  .cf-body,.svc-row,.end-row{grid-template-columns:1fr}
+  .panel-cols{grid-template-columns:1fr}
+  .prod-row{padding-left:var(--pad)}
+  .ridge-labels{grid-template-columns:1fr;gap:6px}.ridge-labels span{text-align:left!important}
+  .ct-row{grid-template-columns:1fr 1fr}.ct-row span:last-child{display:none}
+}
+.variants-wrap{position:fixed;right:var(--pad);bottom:24px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.variants{display:flex;align-items:center;gap:4px;padding:4px 4px 4px 12px;border:1px solid rgba(242,240,235,.15);background:rgba(11,11,12,.75);backdrop-filter:blur(8px);font:12px Onest,sans-serif;color:var(--gr)}
+.variants b{font-weight:400;margin-right:6px}
+.variants button{all:unset;cursor:pointer;padding:6px 10px;color:var(--gr)}
+.variants button.on{color:var(--fg);background:rgba(var(--acc),.18)}
+
+
+/* ---------- шрифтовые пары (html.font-1…5), для сравнения ---------- */
+html[class*="font-"]{--disp:var(--sans)}
+html.font-1{--sans:Onest;--mono:"Martian Mono"}
+html.font-2{--sans:Onest;--disp:Piazzolla;--mono:"Martian Mono"}
+html.font-3{--sans:"Golos Text";--mono:"PT Mono"}
+html.font-4{--sans:Geologica;--mono:"Roboto Mono"}
+html.font-5{--sans:Commissioner;--disp:Spectral;--mono:"Roboto Mono"}
+html[class*="font-"] body{font-family:var(--sans),system-ui,sans-serif}
+html[class*="font-"] :is(.slogan,.b2 h2,.j-big,.j-huge,.cf-title,.prods-title){font-family:var(--disp),var(--sans),serif}
+html[class*="font-"] :is(.kicker,.b2-kick,.j-kick,.meta,.ct-row span:first-child,.foot,.ridge-labels,.svc-l ul,.btn-sm,.panel-top,.panel-bot,.hero-foot){font-family:var(--mono),monospace;font-size:11px;letter-spacing:0;text-transform:none}
+html.font-1 .b2-text,html.font-2 .b2-text{font-weight:400}
+html.font-2 :is(.slogan,.b2 h2,.j-big,.j-huge,.cf-title,.prods-title),html.font-5 :is(.slogan,.b2 h2,.j-big,.j-huge,.cf-title,.prods-title){font-weight:400;letter-spacing:-.025em}
+html.font-4 :is(.slogan,.b2 h2,.j-big,.j-huge){font-weight:400;letter-spacing:-.05em}
+/* ---------- типографика: выбран журнальный (typo-a); «как было» — без класса, typo-b/c в запасе ---------- */
+.slogan-box{padding-left:clamp(0px,9.7vw,136px)}.slogan{padding-left:0}.hero-foot{padding-left:clamp(0px,9.7vw,136px)}
+.kicker,.notes,.fn{display:none}
+.syn{position:relative}
+/* А · журнальный масштаб */
+.typo-a .kicker{display:block;font-size:12px;letter-spacing:.04em;color:var(--gr);margin-bottom:28px}
+.typo-a .slogan{font-size:clamp(52px,9vw,148px);line-height:.9;letter-spacing:-.06em;font-weight:500}
+.typo-a .slogan .ln:nth-child(2)>span{padding-left:1.2em}
+.typo-a .hero-foot{border-top:1px solid rgba(242,240,235,.14);padding-top:18px}
+.typo-a .b2-col{width:min(900px,100%)}
+.typo-a .b2-kick{display:block;grid-row:1/3;font-size:12px;color:var(--gr);padding-top:.8em}
+.typo-a .b2 h2{font-size:clamp(40px,4.6vw,72px);line-height:.96;letter-spacing:-.055em;margin-bottom:32px}
+.typo-a .b2-text{font-size:clamp(20px,2vw,30px);line-height:1.32;letter-spacing:-.025em;color:var(--fg);max-width:820px}
+/* Б · синтаксический разбор */
+.typo-b .kicker{display:block;font:12px "JetBrains Mono",monospace;color:var(--gr);margin-bottom:34px}
+.typo-b .slogan{line-height:1.32}
+.typo-b .slogan .ln{overflow:visible;clip-path:inset(-80% -20% -6% -20%)}
+.typo-b .syn::before{content:attr(data-t);position:absolute;left:0;bottom:100%;margin-bottom:.12em;font:400 12px/1 "JetBrains Mono",monospace;letter-spacing:0;color:var(--gr);white-space:nowrap;opacity:0;animation:synIn .8s 1.6s forwards}
+.typo-b .s2::before{color:var(--red);text-shadow:0 0 10px rgba(var(--acc),.6)}
+.typo-b .s1{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.12em;text-decoration-color:rgba(242,240,235,.5)}
+.typo-b .s2{text-decoration:underline double;text-decoration-thickness:2px;text-underline-offset:.1em;text-decoration-color:var(--red)}
+.typo-b .s3{background:repeating-linear-gradient(90deg,rgba(242,240,235,.5) 0 .4em,transparent .4em .52em,rgba(242,240,235,.5) .52em .6em,transparent .6em .72em) 0 100%/100% 2px no-repeat;padding-bottom:.08em}
+@keyframes synIn{to{opacity:1}}
+.typo-b .b2-kick{display:block;font:12px "JetBrains Mono",monospace;color:var(--gr);margin-bottom:20px}
+.typo-b .fn{display:inline;font:600 .6em "JetBrains Mono",monospace;color:var(--red);vertical-align:super;margin-left:1px}
+.typo-b .notes{display:block;list-style:none;counter-reset:n;margin-top:28px;padding-top:14px;border-top:1px solid rgba(242,240,235,.14);font:12px/1.6 "JetBrains Mono",monospace;color:var(--gr)}
+.typo-b .notes li{counter-increment:n}.typo-b .notes li::before{content:counter(n) "  ";color:var(--red)}
+/* В · крупный капс поверх глаза */
+.typo-c .slogan{text-transform:uppercase;font-size:clamp(46px,7.6vw,128px);line-height:.86;letter-spacing:-.045em;font-weight:600}
+.typo-c .hero .wrap{mix-blend-mode:difference}
+.typo-c .kicker{display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gr);margin-bottom:30px}
+.typo-c .b2-col{width:min(1100px,100%);text-align:center}
+.typo-c .b2-kick{display:block;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gr);margin-bottom:28px}
+.typo-c .b2 h2{text-transform:uppercase;font-weight:600;font-size:clamp(40px,5.6vw,96px);line-height:.9;letter-spacing:-.045em;margin-bottom:40px}
+.typo-c .b2-text{font-size:clamp(18px,1.6vw,24px);line-height:1.45;max-width:760px;margin:0 auto}
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="top"><div class="wrap" style="justify-content:flex-end">
+  <a class="cta-top" href="#talk">Давайте поговорим</a>
+</div></header>
+<div class="rail">
+  <a class="logo" href="#" aria-label="Sintara"><span class="logo-mark" id="logoMark"></span><span class="logo-word" id="logoWord"><span id="logoWordIn" style="display:inline-block">Sintara</span></span></a>
+  <a class="burger" id="burger" href="#" aria-label="Меню"><i></i><i></i></a>
+  <button class="rail-next" id="railNext" aria-label="Следующий блок"><canvas id="arrowCanvas"></canvas></button>
+</div>
+
+<section class="hero" id="hero">
+  <div class="eye-layer" id="eyeLayer"><canvas class="eye-canvas" id="eyeCanvas" aria-hidden="true"></canvas>
+  <div class="eye-shade"></div></div>
+  <div class="wrap">
+    <div class="slogan-box" style="align-self:center">
+      <h1 class="slogan"><span class="ln"><span><span class="syn s1" data-t="подлежащее">Ваш бизнес</span> <span class="syn s2" data-t="сказуемое">говорит</span></span></span><span class="ln"><span>на&nbsp;своём <span class="syn s3" data-t="обстоятельство">языке</span><span class="dot" id="dot">.</span></span></span></h1>
+      <a class="more fade" href="#system">Посмотреть работы</a>
+    </div>
+    <div class="hero-foot fade">
+      <p><b>Студия систем</b>CRM, интеграции и&nbsp;автоматизация<br>под&nbsp;ваш бизнес</p>
+      <p><b>И&nbsp;у&nbsp;каждого языка есть синтаксис</b>Находим правила вашего дела<br>и&nbsp;собираем из&nbsp;них систему</p>
+      <p class="geo">Пхукет — Бали — Хошимин</p>
+    </div>
+  </div>
+</section>
+
+<section class="b2" id="words">
+  <div class="b2-col">
+    <h2 class="reveal"><span class="ln"><span>Мы знаем слова.</span></span><span class="ln"><span style="color:var(--gr)">И&nbsp;выучим ваши.</span></span></h2>
+    <p class="b2-text para">У&nbsp;каждого бизнеса свой словарь: в&nbsp;прокате — «бронь»<sup class="fn">1</sup> и&nbsp;«депозит»<sup class="fn">2</sup>, в&nbsp;ресторане — «посадка» и&nbsp;«стоп-лист»<sup class="fn">3</sup>. Мы&nbsp;начинаем не&nbsp;с&nbsp;дизайна, а&nbsp;с&nbsp;<em>языка</em>: слушаем команду, проходим путь клиента и&nbsp;записываем каждое правило. Из&nbsp;этого словаря вырастает система, которая понимает ваш бизнес так&nbsp;же хорошо, как&nbsp;вы.</p>
+    <ol class="notes"><li>Бронь — обещание машины клиенту на даты.</li><li>Депозит — деньги, которые держат обещание.</li><li>Стоп-лист — то, чего сегодня нет.</li></ol>
+  </div>
+</section>
+
+<section class="system" id="system">
+  <div class="sys-in">
+    <div class="track" id="track">
+      <div class="sys-intro" id="sysIntro">
+        <h2 class="sys-title" id="sysTitle"><span class="ln"><span>Ваш бизнес —</span></span><span class="ln"><span>одна система.</span></span><span class="ln"><span>И&nbsp;мы знаем правила.</span></span></h2>
+        <ul class="rules" id="rules"><li>Одно окно для&nbsp;всех каналов</li><li>Процессы идут сами</li><li>Цифры за&nbsp;пять секунд</li></ul>
+      </div>
+      <article class="card"><div class="ph"><img src="img/case-crm.webp" alt="CRM Sintara Rent" loading="lazy"></div><p>Sintara Rent<span>CRM для&nbsp;проката · 2025</span></p></article>
+      <article class="card"><div class="ph"><img src="img/case-rent.webp" alt="Сайт UNICAR" loading="lazy"></div><p>UNICAR<span>Сайт проката · Пхукет</span></p></article>
+      <article class="card"><div class="ph"><img src="img/case-spa.webp" alt="Сайт велнес-спа" loading="lazy"></div><p>Wellness<span>Сайт и&nbsp;айдентика</span></p></article>
+      <article class="card"><div class="ph"><img src="img/case-inbox.webp" alt="Общий чат" loading="lazy"></div><p>Общий чат<span>Боты и&nbsp;интеграции</span></p></article>
+    </div>
+    <div class="wrap"><div class="progress"><i id="bar"></i></div><span class="count" id="count">01 / 04</span></div>
+  </div>
+</section>
+<!-- ===== переход: гряда из серого в чёрное ===== -->
+<section class="ridge" id="ridge">
+  <img class="ridge-img" id="ridgeImg" src="img/ridge.webp" alt="">
+  <div class="ridge-labels wrap"><span>Sintara©</span><span>Мы видим всё</span><span>Теперь и вы</span></div>
+</section>
+
+<!-- ===== мы видим всё: журнальный разворот + кейс ===== -->
+<section class="j-see">
+  <div class="wrap">
+    <div class="j-grid j-head">
+      <h2 class="j-big reveal"><span class="ln"><span>Мы видим всё.</span></span><span class="ln"><span class="dim">Теперь и&nbsp;вы.</span></span></h2>
+    </div>
+    <div class="j-grid">
+      <p class="j-lead tt"><span class="dim">Владелец обычно узнаёт о&nbsp;проблемах последним: из&nbsp;жалобы клиента, из&nbsp;пустой кассы, из&nbsp;ушедшего сотрудника.</span> Мы&nbsp;сводим заявки, деньги, загрузку и&nbsp;потери в&nbsp;один экран — чтобы вы&nbsp;видели свой бизнес целиком, каждое утро, за&nbsp;пять секунд.</p>
+    </div>
+
+    <article class="case-feature">
+      <div class="cf-img clip"><img src="img/case-crm.webp" alt="Sintara Rent — CRM для проката" loading="lazy"></div>
+      <div class="cf-body">
+        <h3 class="cf-title reveal"><span class="ln"><span>Sintara Rent</span></span></h3>
+        <div class="cf-side">
+          <dl class="meta fade-in">
+            <div><dt>Услуги</dt><dd>CRM, интеграции, аналитика</dd></div>
+            <div><dt>Клиент</dt><dd>Прокат авто и&nbsp;байков</dd></div>
+            <div><dt>Проект</dt><dd>Собственный продукт студии</dd></div>
+            <div><dt>Каналы</dt><dd>Telegram<br>WhatsApp<br>Instagram<br>Facebook</dd></div>
+            <div><dt>Год</dt><dd>2025</dd></div>
+          </dl>
+          <p class="cf-text fade-in">Прокатные компании в&nbsp;Пхукете вели брони в&nbsp;чатах и&nbsp;таблицах: депозиты терялись, машины простаивали, владелец не&nbsp;видел, сколько зарабатывает каждая из&nbsp;них. Мы&nbsp;собрали систему, где все каналы сходятся в&nbsp;одну ленту, бронь и&nbsp;оплата проходят без&nbsp;ручной работы, а&nbsp;финансы видны по&nbsp;каждой машине. Запуск занимает пять минут.</p>
+          <a class="j-link fade-in" href="#">Смотреть кейс <span>→</span></a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== вселенная: панель из трёх колонок + продукты ===== -->
+<section class="j-uni">
+  <div class="wrap">
+    <div class="j-grid j-head">
+      <h2 class="j-big reveal"><span class="ln"><span>Ваш бизнес —</span></span><span class="ln"><span>целая вселенная.</span></span><span class="ln"><span class="dim">Сделайте его глобальным.</span></span></h2>
+    </div>
+
+    <div class="panel fade-in">
+      <div class="panel-top"><span>Sintara</span><i class="star"></i></div>
+      <div class="panel-cols">
+        <div class="pc">
+          <svg class="pc-ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17"/><ellipse cx="24" cy="24" rx="7.5" ry="17"/><path d="M7 24h34M10 15h28M10 33h28"/></svg>
+          <h3>Одна система<br><span class="dim">на&nbsp;все рынки</span></h3>
+          <p>Сайт, CRM и&nbsp;боты говорят на&nbsp;языках ваших клиентов — русском, английском, тайском. Новый рынок — это новый язык в&nbsp;настройках, а&nbsp;не&nbsp;новый проект.</p>
+        </div>
+        <div class="pc">
+          <svg class="pc-ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="6" class="acc"/><circle cx="24" cy="24" r="13"/><circle cx="24" cy="24" r="20"/><circle cx="37" cy="24" r="2.4" class="fill"/><circle cx="12" cy="16" r="2" class="fill"/></svg>
+          <h3>Растёт<br><span class="dim">без&nbsp;переделки</span></h3>
+          <p>Закладываем архитектуру с&nbsp;запасом: новые филиалы, сотрудники и&nbsp;каналы подключаются к&nbsp;той&nbsp;же системе. Данные не&nbsp;переносятся — они уже на&nbsp;своих местах.</p>
+        </div>
+        <div class="pc">
+          <svg class="pc-ico" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="4" class="acc"/><path d="M24 4v10M24 34v10M4 24h10M34 24h10M10 10l7 7M31 31l7 7M38 10l-7 7M17 31l-7 7"/><circle cx="24" cy="4" r="2" class="fill"/><circle cx="24" cy="44" r="2" class="fill"/><circle cx="4" cy="24" r="2" class="fill"/><circle cx="44" cy="24" r="2" class="fill"/></svg>
+          <h3>Голос,<br><span class="dim">понятный везде</span></h3>
+          <p>Айдентика и&nbsp;контент, которые одинаково сильно звучат в&nbsp;Пхукете, на&nbsp;Бали и&nbsp;в&nbsp;Дубае. Один стиль, один тон — на&nbsp;любой площадке и&nbsp;в&nbsp;любой стране.</p>
+        </div>
+      </div>
+      <div class="panel-bot"><span>04</span><span>↗</span></div>
+    </div>
+
+    <div class="prods">
+      <h3 class="prods-title reveal"><span class="ln"><span>Готовые решения, которые</span></span><span class="ln"><span>запускаются за&nbsp;дни, а&nbsp;не&nbsp;месяцы.</span></span></h3>
+      <p class="prods-text fade-in">Мы&nbsp;упаковали то, что повторяется в&nbsp;каждом бизнесе, в&nbsp;продукты. Берёте основу — мы&nbsp;настраиваем её&nbsp;под ваш язык.</p>
+    </div>
+  </div>
+  <div class="prod-row" id="prodRow">
+    <a class="prod" href="#"><img src="img/prod-ring.webp" alt="" loading="lazy"><b>Sintara Rent</b><span>CRM для&nbsp;проката авто и&nbsp;байков</span></a>
+    <a class="prod" href="#"><img src="img/prod-dna.webp" alt="" loading="lazy"><b>Общий чат</b><span>Instagram, WhatsApp и&nbsp;Telegram в&nbsp;одной ленте</span></a>
+    <a class="prod" href="#"><img src="img/prod-stones.webp" alt="" loading="lazy"><b>Бот записи</b><em>В&nbsp;работе</em><span>Запись и&nbsp;оплата прямо в&nbsp;мессенджере</span></a>
+    <a class="prod" href="#"><img src="img/prod-const.webp" alt="" loading="lazy"><b>Экран владельца</b><em>В&nbsp;работе</em><span>Деньги, загрузка и&nbsp;потери за&nbsp;пять секунд</span></a>
+  </div>
+</section>
+
+<!-- ===== голос: журнальный список услуг ===== -->
+<section class="j-voice">
+  <div class="wrap">
+    <div class="j-grid j-head">
+      <h2 class="j-big reveal"><span class="ln"><span>Мы даём ему голос.</span></span><span class="ln"><span class="dim">Сайт, айдентика, соцсети, видео.</span></span></h2>
+    </div>
+    <div class="svc">
+      <article class="svc-row">
+        <div class="svc-l"><h3>Сайты<br>и&nbsp;лендинги</h3><ul><li>Дизайн</li><li>Разработка</li><li>Бронирование</li></ul><a class="btn-sm" href="#">Смотреть работы</a></div>
+        <div class="svc-r clip"><img src="img/svc-site.webp" alt="" loading="lazy"></div>
+      </article>
+      <article class="svc-row">
+        <div class="svc-l"><h3>Айдентика</h3><ul><li>Логотип</li><li>Стиль</li><li>Носители</li></ul><a class="btn-sm" href="#">Смотреть работы</a></div>
+        <div class="svc-r clip"><img src="img/svc-identity.webp" alt="" loading="lazy"></div>
+      </article>
+      <article class="svc-row">
+        <div class="svc-l"><h3>Соцсети<br>и&nbsp;контент</h3><ul><li>Стратегия</li><li>Визуал</li><li>Ведение</li></ul><a class="btn-sm" href="#">Смотреть работы</a></div>
+        <div class="svc-r clip"><img src="img/svc-smm.webp" alt="" loading="lazy"></div>
+      </article>
+      <article class="svc-row">
+        <div class="svc-l"><h3>Видео</h3><ul><li>Сценарий</li><li>Съёмка</li><li>Монтаж</li></ul><a class="btn-sm" href="#">Смотреть работы</a></div>
+        <div class="svc-r clip"><img src="img/svc-video.webp" alt="" loading="lazy"></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== финал ===== -->
+<section class="j-end" id="talk">
+  <div class="wrap">
+    <h2 class="j-huge reveal"><span class="ln"><span>Ваш бизнес —</span></span><span class="ln"><span>ваш язык<span class="dot">.</span></span></span></h2>
+    <div class="end-row">
+      <p class="j-lead tt"><span class="dim">Расскажите, чем живёт ваш бизнес.</span> Мы&nbsp;ответим в&nbsp;течение дня и&nbsp;предложим, с&nbsp;чего начать.</p>
+      <a class="btn-big fade-in" href="https://t.me/" target="_blank" rel="noopener">Давайте поговорим <span>→</span></a>
+    </div>
+    <div class="contacts">
+      <div class="ct-row"><span>Telegram</span><span>@sintara</span><span>Ответ за&nbsp;час</span></div>
+      <div class="ct-row"><span>WhatsApp</span><span>+66 00 000 0000</span><span>Пхукет</span></div>
+      <div class="ct-row"><span>Почта</span><span>hello@sintara.io</span><span>Для&nbsp;брифов</span></div>
+    </div>
+    <footer class="foot"><span>© 2026 Sintara</span><span>Пхукет — Бали — Хошимин</span><span>Студия систем</span></footer>
+  </div>
+</section>
+
+
+<script src="eye-digits.js?v=20"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
+gsap.registerPlugin(ScrollTrigger);
+if (!reduce) {
+  const lenis = window.lenis = new Lenis({ lerp: .09 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+}
+
+/* Текст: строки выезжают из-под маски, как на lenis.dev */
+const EASE = 'expo.out';
+const lines = el => el.querySelectorAll('.ln > span');
+if (reduce) {
+  document.documentElement.classList.remove('js');
+} else {
+  gsap.set('#dot', { display: 'inline-block', scale: 0, transformOrigin: '50% 80%' });
+  gsap.timeline({ delay: .15 })
+    .to(window.eyeDigits || {}, { alpha: 1, duration: .6, ease: 'none' }, 0)
+    .to(window.eyeDigits || {}, { reveal: 1, duration: 2.6, ease: 'power2.inOut' }, 0)
+    .from('#logoMark', { rotate: -120, scale: .4, opacity: 0, duration: 1.4, ease: 'expo.out' }, .2)
+    .from('#logoWordIn', { x: -12, opacity: 0, duration: 1, ease: EASE }, .5)
+    .from('#burger i', { scaleX: 0, duration: 1, ease: EASE, stagger: .12 }, .7)
+    .to(lines(document.querySelector('.slogan')), { y: 0, duration: 1.3, ease: EASE, stagger: .1 }, .25)
+    .to('#dot', { scale: 1, duration: .6, ease: 'back.out(3)' }, 1.05)
+    .fromTo('#dot', { filter: 'brightness(2.2)' }, { filter: 'brightness(1)', duration: .8, ease: 'power2.out' }, 1.1)
+    .to({}, { duration: 0 }, 1.0)
+    .to('.hero .fade', { opacity: 1, y: 0, duration: 1, ease: EASE, stagger: .12 }, 1.0)
+    .from('.cta-top', { opacity: 0, y: -10, duration: 1, ease: EASE }, .8);
+
+  // надписи первого экрана уходят раньше, глаз отстаёт и заходит на следующий экран
+  gsap.to('.hero .wrap', { y: -90, opacity: 0, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: '38% top', scrub: true } });
+  gsap.to('#eyeLayer', { y: () => innerHeight * .08, ease: 'none',
+    scrollTrigger: { trigger: '#hero', start: 'top top', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+  // слово Sintara уходит вверх вместе с надписями, знак остаётся (3 варианта, ?logo=)
+  const LOGO = { together: '38% top', fast: '16% top', slow: '70% top' };
+  let logoTween;
+  window.setLogoExit = k => {
+    const switched = !!logoTween;
+    if (logoTween) { logoTween.scrollTrigger.kill(); logoTween.kill(); gsap.set('#logoWord', { y: 0, opacity: 1 }); }
+    logoTween = gsap.fromTo('#logoWord', { y: 0, opacity: 1 }, { y: -90, opacity: 0, ease: 'none', immediateRender: false,
+      scrollTrigger: { trigger: '#hero', start: 'top top', end: LOGO[k] || LOGO.together, scrub: true } });
+    if (switched) ScrollTrigger.refresh();
+  };
+  setLogoExit('together');
+
+  document.querySelectorAll('.reveal').forEach(h => gsap.to(lines(h), { y: 0, duration: 1.3, ease: EASE, stagger: .1,
+    scrollTrigger: { trigger: h, start: 'top 82%' } }));
+
+
+  const para = document.querySelector('.para');
+  var walk = n => [...n.childNodes].forEach(c => {
+    if (c.nodeType === 3) {
+      const f = document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach(t => {
+        if (!t) return;
+        if (/^\s+$/.test(t)) f.append(t);
+        else { const w = document.createElement('span'); w.className = 'w'; w.textContent = t; f.append(w); }
+      });
+      c.replaceWith(f);
+    } else if (c.nodeType === 1) walk(c);
+  });
+  walk(para);
+  gsap.fromTo(para.querySelectorAll('.w'), { opacity: .12 }, { opacity: 1, stagger: .05, ease: 'none',
+    scrollTrigger: { trigger: para, start: 'top 85%', end: 'bottom 55%', scrub: true } });
+}
+
+/* Меню услуг */
+const CASES = {
+  crm:   ['img/case-crm.webp',  'Sintara Rent · CRM для проката', '[ 2025 ]'],
+  site:  ['img/case-rent.webp', 'UNICAR · сайт проката', '[ Пхукет ]'],
+  app:   ['img/case-rent.webp', 'Концепт · мобильное приложение', '[ Концепт ]'],
+  bots:  ['img/case-inbox.webp','Общий чат · Instagram, WhatsApp, Telegram', '[ Интеграции ]'],
+  brand: ['img/case-spa.webp',  'Wellness · сайт и айдентика', '[ Бренд ]'],
+};
+const img = document.getElementById('caseImg'), capA = document.getElementById('capA'), capB = document.getElementById('capB');
+let current = 'site';
+document.querySelectorAll('#menu button').forEach(b => {
+  const pick = () => {
+    if (b.dataset.k === current) return;
+    current = b.dataset.k;
+    document.querySelectorAll('#menu button').forEach(x => x.classList.toggle('on', x === b));
+    const [src, a, c] = CASES[current];
+    img.classList.add('out');
+    setTimeout(() => { img.onload = () => img.classList.remove('out'); img.src = src; capA.textContent = a; capB.textContent = c; if (img.complete) img.classList.remove('out'); }, 200);
+  };
+  b.addEventListener('mouseenter', pick); b.addEventListener('click', pick); b.addEventListener('focus', pick);
+});
+
+/* Портфолио: заголовок появляется вместе с первым кейсом, дальше всё вместе едет влево */
+const track = document.getElementById('track'), bar = document.getElementById('bar'), count = document.getElementById('count');
+const cards = [...track.querySelectorAll('.card')], n = cards.length;
+const dist = () => Math.max(0, track.scrollWidth - innerWidth + 64);
+if (!reduce) {
+  const phs = cards.map(c => c.querySelector('.ph')), imgs = cards.map(c => c.querySelector('img'));
+  gsap.set(phs, { clipPath: 'inset(0% 100% 0% 0%)' });
+  gsap.set(imgs, { scale: 1.25 });
+  gsap.set('#rules li', { opacity: 0, y: 12 });
+  gsap.timeline({ scrollTrigger: { trigger: '#system', start: 'top 65%' } })
+    .to(lines(document.getElementById('sysTitle')), { y: 0, duration: 1.2, ease: EASE, stagger: .08 }, 0)
+    .to(phs, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'expo.inOut', stagger: .1 }, .1)
+    .to(imgs, { scale: 1, duration: 1.6, ease: EASE, stagger: .1 }, .1)
+    .to('#rules li', { opacity: 1, y: 0, duration: .9, ease: EASE, stagger: .08 }, .4);
+  gsap.to(track, { x: () => -dist(), ease: 'none',
+    scrollTrigger: { trigger: '#system', pin: true, scrub: 1, start: 'top top', end: () => '+=' + dist(), invalidateOnRefresh: true,
+      onUpdate: s => { bar.style.width = s.progress * 100 + '%';
+        count.textContent = String(Math.min(n, 1 + Math.floor(s.progress * n * .999))).padStart(2, '0') + ' / ' + String(n).padStart(2, '0'); } } });
+}
+
+/* Журнальная часть: появление текста, шторки картинок, гряда, перетаскивание продуктов */
+if (!reduce) {
+  ScrollTrigger.batch('.j-see .fade-in, .j-uni .fade-in, .j-voice .fade-in, .j-end .fade-in', {
+    start: 'top 88%', once: true,
+    onEnter: els => gsap.fromTo(els, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1.1, ease: EASE, stagger: .08 }) });
+  document.querySelectorAll('.j-see .clip, .j-voice .clip').forEach(c => {
+    gsap.fromTo(c, { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: c, start: 'top 85%' } });
+    gsap.fromTo(c.querySelector('img'), { scale: 1.2 }, { scale: 1, duration: 1.8, ease: EASE, scrollTrigger: { trigger: c, start: 'top 85%' } });
+  });
+  // двухтонный текст: проявляется по словам при скролле
+  document.querySelectorAll('.tt').forEach(p => {
+    walk(p);
+    gsap.fromTo(p.querySelectorAll('.w'), { opacity: .15 }, { opacity: 1, stagger: .05, ease: 'none',
+      scrollTrigger: { trigger: p, start: 'top 85%', end: 'bottom 60%', scrub: true } });
+  });
+  gsap.from('.prod', { opacity: 0, x: 60, duration: 1.2, ease: EASE, stagger: .08, scrollTrigger: { trigger: '#prodRow', start: 'top 85%' } });
+  // гряда медленнее страницы, подписи появляются на её фоне
+  gsap.fromTo('#ridgeImg', { yPercent: -6 }, { yPercent: 6, ease: 'none', scrollTrigger: { trigger: '#ridge', start: 'top bottom', end: 'bottom top', scrub: true } });
+  gsap.from('.ridge-labels span', { opacity: 0, y: 10, duration: 1, ease: EASE, stagger: .12, scrollTrigger: { trigger: '.ridge-labels', start: 'top 80%' } });
+}
+// продукты можно тащить мышью
+(() => {
+  const row = document.getElementById('prodRow'); if (!row) return;
+  let down = false, sx = 0, sl = 0;
+  row.addEventListener('pointerdown', e => { if (e.pointerType !== 'mouse') return; down = true; sx = e.clientX; sl = row.scrollLeft; row.style.cursor = 'grabbing'; });
+  addEventListener('pointerup', () => { down = false; row.style.cursor = ''; });
+  row.addEventListener('pointermove', e => { if (down) row.scrollLeft = sl - (e.clientX - sx); });
+})();
+
+/* Стрелка вниз из цифр: листает к следующему блоку, как слайды */
+(() => {
+  const btn = document.getElementById('railNext'), cv = document.getElementById('arrowCanvas'); if (!btn) return;
+  const g = cv.getContext('2d'), dpr = Math.min(devicePixelRatio || 1, 2), CW = 6, CH = 8, COLS = 5, ROWS = 8;
+  cv.width = 34 * dpr; cv.height = 64 * dpr;
+  // форма стрелки: стержень и наконечник
+  const on = (x, y) => (x === 2 && y < 6) || (y >= 4 && Math.abs(x - 2) === 6 - y) || (y === 7 && x === 2) || (y === 6 && Math.abs(x - 2) <= 1);
+  const digs = Array.from({ length: COLS * ROWS }, () => Math.floor(Math.random() * 10));
+  const acc = getComputedStyle(document.documentElement).getPropertyValue('--acc').trim() || '139,92,255';
+  let hover = false, t0 = performance.now();
+  btn.addEventListener('mouseenter', () => hover = true); btn.addEventListener('mouseleave', () => hover = false);
+  function draw(t) {
+    requestAnimationFrame(draw);
+    g.setTransform(dpr, 0, 0, dpr, 0, 0); g.clearRect(0, 0, 34, 64);
+    g.font = '8px "JetBrains Mono", monospace'; g.textBaseline = 'top';
+    const bob = reduce ? 0 : Math.sin((t - t0) / 600) * 3;
+    for (let y = 0; y < ROWS; y++) for (let x = 0; x < COLS; x++) {
+      if (!on(x, y)) continue;
+      const i = y * COLS + x; if (!reduce && Math.random() < .04) digs[i] = Math.floor(Math.random() * 10);
+      const wave = (Math.sin((t - t0) / 300 - y * .7) + 1) / 2;       // волна бежит вниз
+      const a = .45 + .55 * wave;
+      g.fillStyle = hover ? `rgba(${acc},${a})` : `rgba(242,240,235,${a})`;
+      if (hover) { g.shadowColor = `rgba(${acc},.8)`; g.shadowBlur = 6; } else g.shadowBlur = 0;
+      g.fillText(digs[i], 2 + x * CW, 2 + y * CH + bob);
+    }
+  }
+  requestAnimationFrame(draw);
+  // следующий блок: первый, чья верхняя граница ниже текущей позиции
+  const stops = () => [...document.querySelectorAll('#hero, #words, #system, #ridge, .j-see, .j-uni, .j-voice, .j-end')]
+    .map(el => { const sp = el.parentElement.classList.contains('pin-spacer') ? el.parentElement : el; return sp.getBoundingClientRect().top + scrollY; });
+  btn.addEventListener('click', () => {
+    const y = scrollY, next = stops().find(v => v > y + 8);
+    if (next == null) return;
+    window.lenis ? window.lenis.scrollTo(next, { duration: 1.2, easing: k => 1 - Math.pow(1 - k, 4) }) : scrollTo({ top: next, behavior: 'smooth' });
+  });
+})();
+</script>
+<!-- переключатель вариантов для сравнения (убрать перед публикацией) -->
+<div class="variants-wrap" id="variants">
+</div>
+<script>
+(() => { const apply = { typo: v => { const h = document.documentElement; h.classList.remove("typo-a", "typo-b", "typo-c"); if (v !== "now") h.classList.add("typo-" + v); ScrollTrigger.refresh(); },
+    font: v => { const h = document.documentElement; h.classList.remove("font-1", "font-2", "font-3", "font-4", "font-5"); if (v !== "0") h.classList.add("font-" + v); document.fonts.ready.then(() => ScrollTrigger.refresh()); } };
+  document.querySelectorAll("#variants .variants").forEach(box => { const key = box.dataset.key;
+    const set = (v, init) => { box.querySelectorAll("button").forEach(b => b.classList.toggle("on", b.dataset.v === v)); if (!init) apply[key](v);
+      const u = new URL(location); u.searchParams.set(key, v); history.replaceState(null, "", u); };
+    box.querySelectorAll("button").forEach(b => b.onclick = () => set(b.dataset.v));
+    set(new URLSearchParams(location.search).get(key) || box.dataset.def, false); }); })();
+</script>
+</body>
+</html>
